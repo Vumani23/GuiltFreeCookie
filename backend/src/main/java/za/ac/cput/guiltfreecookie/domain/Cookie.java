@@ -2,6 +2,8 @@ package za.ac.cput.guiltfreecookie.domain;
 
 
 
+import javax.annotation.processing.Generated;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -9,6 +11,7 @@ import jakarta.persistence.*;
 public class Cookie {
 
     @Id
+    @GeneratedValue
     private String cookieId;
 
     @Enumerated(EnumType.STRING)

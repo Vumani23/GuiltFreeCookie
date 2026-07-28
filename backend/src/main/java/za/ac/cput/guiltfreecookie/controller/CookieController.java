@@ -12,6 +12,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cookie")
+@CrossOrigin(origins = "http://localhost:5173")
+
 public class CookieController {
 
     private final CookieService cookieService;
@@ -27,12 +29,8 @@ public class CookieController {
         return ResponseEntity.ok("Cookie API is working!");
     }
 
-    // Get all - root path
-    @GetMapping
-    public ResponseEntity<List<Cookie>> root() {
-        return ResponseEntity.ok(cookieService.getAll());
-    }
 
+    @CrossOrigin
     @GetMapping("/getAll")
     public ResponseEntity<List<Cookie>> getAll() {
         return ResponseEntity.ok(cookieService.getAll());
@@ -53,10 +51,21 @@ public class CookieController {
         return ResponseEntity.ok(cookie);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Cookie> update(@RequestBody Cookie cookie) {
-        return ResponseEntity.ok(cookieService.update(cookie));
+   @PutMapping("/update/{cookieId}")
+public ResponseEntity<Cookie> update(
+        @PathVariable String cookieId,
+        @RequestBody Cookie cookie) {
+
+
+
+    Cookie updated = cookieService.update(cookie);
+
+    if (updated == null) {
+        return ResponseEntity.notFound().build();
     }
+
+    return ResponseEntity.ok(updated);
+}
 
     @DeleteMapping("/delete/{cookieId}")
     public ResponseEntity<Void> delete(@PathVariable String cookieId) {
@@ -64,33 +73,4 @@ public class CookieController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<Cookie>> getByCategory(@PathVariable CookieCategory category) {
-        return ResponseEntity.ok(cookieService.getByCategory(category));
-    }
-
-    @GetMapping("/price-range")
-    public ResponseEntity<List<Cookie>> getByPriceRange(
-            @RequestParam Double min,
-            @RequestParam Double max) {
-        return ResponseEntity.ok(cookieService.getByPriceRange(min, max));
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<List<Cookie>> search(@RequestParam String keyword) {
-        return ResponseEntity.ok(cookieService.searchAll(keyword));
-    }
-
-    @GetMapping("/filter")
-    public ResponseEntity<List<Cookie>> filterCookies(
-            @RequestParam(required = false) CookieCategory category,
-            @RequestParam(required = false, defaultValue = "0") Double minPrice,
-            @RequestParam(required = false, defaultValue = "9999") Double maxPrice) {
-        return ResponseEntity.ok(cookieService.filterCookies(category, minPrice, maxPrice));
-    }
-
-    @GetMapping("/allergy-free")
-    public ResponseEntity<List<Cookie>> getAllergyFree(@RequestParam String allergy) {
-        return ResponseEntity.ok(cookieService.getAllergyFree(allergy));
-    }
 }
