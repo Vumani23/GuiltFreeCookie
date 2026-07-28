@@ -30,7 +30,23 @@ public class CookieService implements IService<Cookie, String> {
 
     @Override
     public Cookie update(Cookie cookie) {
-        return this.cookieRepository.save(cookie);
+
+        Cookie existing = cookieRepository.findById(cookie.getCookieId()).orElse(null);
+
+        if (existing == null) {
+            return null;
+        }
+
+        Cookie updated = new Cookie.Builder()
+                .copy(existing)
+                .setCategory(cookie.getCategory())
+                .setDescription(cookie.getDescription())
+                .setIngredients(cookie.getIngredients())
+                .setAllergies(cookie.getAllergies())
+                .setPrice(cookie.getPrice())
+                .build();
+
+        return cookieRepository.save(updated);
     }
 
     @Override
@@ -47,52 +63,4 @@ public class CookieService implements IService<Cookie, String> {
         return this.cookieRepository.findAll();
     }
 
-    // Custom methods
-    public List<Cookie> getByCategory(CookieCategory category) {
-        return this.cookieRepository.findByCategory(category);
-    }
-
-    public List<Cookie> getByPriceRange(Double minPrice, Double maxPrice) {
-        return this.cookieRepository.findByPriceBetween(minPrice, maxPrice);
-    }
-
-    public List<Cookie> getByMaxPrice(Double price) {
-        return this.cookieRepository.findByPriceLessThanEqual(price);
-    }
-
-    public List<Cookie> getByMinPrice(Double price) {
-        return this.cookieRepository.findByPriceGreaterThanEqual(price);
-    }
-
-    public List<Cookie> searchByDescription(String keyword) {
-        return this.cookieRepository.findByDescriptionContainingIgnoreCase(keyword);
-    }
-
-    public List<Cookie> searchByIngredient(String ingredient) {
-        return this.cookieRepository.findByIngredientsContainingIgnoreCase(ingredient);
-    }
-
-    public List<Cookie> searchByAllergy(String allergy) {
-        return this.cookieRepository.findByAllergiesContainingIgnoreCase(allergy);
-    }
-
-    public List<Cookie> getAllergyFree(String allergy) {
-        return this.cookieRepository.findByAllergiesNotContainingIgnoreCase(allergy);
-    }
-
-    public List<Cookie> searchAll(String keyword) {
-        return this.cookieRepository.searchCookies(keyword);
-    }
-
-    public List<Cookie> filterCookies(CookieCategory category, Double minPrice, Double maxPrice) {
-        return this.cookieRepository.filterCookies(category, minPrice, maxPrice);
-    }
-
-    public Long countByCategory(CookieCategory category) {
-        return this.cookieRepository.countByCategory(category);
-    }
-
-    public boolean cookieExists(String cookieId) {
-        return this.cookieRepository.existsByCookieId(cookieId);
-    }
 }
