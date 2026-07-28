@@ -14,7 +14,10 @@ export default {
   },
 
   async update(cookie) {
-    const response = await axios.put(`${API_BASE}/update`, cookie);
+    const response = await axios.put(
+      `${API_BASE}/update/${cookie.cookieId}`,
+      cookie,
+    );
     return response.data;
   },
 

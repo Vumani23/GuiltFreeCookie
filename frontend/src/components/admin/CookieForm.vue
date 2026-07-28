@@ -11,7 +11,7 @@ const props = defineProps({
 const emit = defineEmits(["save", "close"]);
 
 const form = reactive({
-  cookieId: "",
+  cookieId: null,
   category: "",
   description: "",
   ingredients: "",
@@ -30,7 +30,7 @@ watch(
       form.allergies = cookie.allergies;
       form.price = cookie.price;
     } else {
-      form.cookieId = "";
+      form.cookieId = null;
       form.category = "";
       form.description = "";
       form.ingredients = "";

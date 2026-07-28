@@ -99,6 +99,7 @@ const deleteCookie = async (id) => {
 
     <!-- IMPORTANT: This was missing -->
     <CookieForm
+      class="z-50 fixed inset-0 bg-black/50 flex justify-center items-center"
       v-if="showForm"
       :cookie="selectedCookie"
       @save="saveCookie"
