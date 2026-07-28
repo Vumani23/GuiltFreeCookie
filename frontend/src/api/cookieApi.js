@@ -29,4 +29,7 @@ export default {
     const response = await axios.get(`${API_BASE}/read/${cookieId}`);
     return response.data;
   },
+  async getById(cookieId) {
+    return this.read(cookieId);
+  },
 };
