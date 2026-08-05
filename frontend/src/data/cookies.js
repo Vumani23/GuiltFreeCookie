@@ -563,32 +563,32 @@ export const testimonials = [
 export const faqs = [
   {
     id: 1,
-    question: 'How long do your cookies stay fresh after purchase?',
+    question: 'Are your cookies safe for diabetics and blood sugar management?',
     answer:
-      'Our cookies stay fresh for 5–7 days when stored in an airtight container at room temperature. For longer storage, they can be frozen for up to 3 months — just warm them in a 160°C oven for 4 minutes and they taste freshly baked.',
+        'Yes, absolutely. We formulate our cookies using natural, zero-glycemic index sweeteners (like erythritol and stevia) and nutrient-dense almond flour. They are specifically crafted not to spike blood sugar or trigger insulin surges, making them safe for Type 1 and Type 2 diabetics.',
   },
   {
     id: 2,
-    question: 'Do you use any artificial flavours or preservatives?',
+    question: 'What are the net carbs and macros per cookie?',
     answer:
-      'Never. Every CrumbleMagic cookie is made with 100% natural ingredients — real Belgian chocolate, French butter, Madagascan vanilla, and stone-ground spices. No preservatives, no artificial flavourings, no shortcuts.',
+        'Our cookies average between 1g to 3g of net carbs, around 4g to 6g of protein, and zero added sugar. Detailed nutritional info and macro breakdowns are provided on every product card and package label.',
   },
   {
     id: 3,
-    question: 'How are the cookies packaged to stay fresh during delivery?',
+    question: 'Do you use any artificial sweeteners, preservatives, or seed oils?',
     answer:
-      'Each cookie is individually sealed in food-grade kraft pouches to lock in freshness, then packed in a protective CrumbleMagic gift box with thermal padding for temperature-sensitive items. We use carbon-neutral couriers for all deliveries.',
+        'Never. We avoid aspartame, sucralose, seed oils, and artificial preservatives completely. We stick to clean, whole ingredients like almond flour, grass-fed butter or cold-pressed coconut oil, and 100% cocoa dark chocolate.',
   },
   {
     id: 4,
-    question: 'Do you offer bulk orders for parties, weddings, or corporate events?',
+    question: 'Are all your cookies gluten-free and keto/banting friendly?',
     answer:
-      'Absolutely. We create bespoke cookie bars and gift boxes for weddings, corporate events, and parties of any size. Minimum order is 50 cookies, with 7 days notice. Reach out via our contact form for a tailored quote and tasting box.',
+        'Yes! Because we use 100% grain-free nut flours instead of wheat, all our cookies are naturally gluten-free and perfect for Keto, Banting, and low-carb lifestyles. We also have dedicated dairy-free/vegan options.',
   },
   {
     id: 5,
-    question: 'Do you have eggless or gluten-free cookie options?',
+    question: 'How long do they stay fresh, and can they be frozen?',
     answer:
-      'Yes — our Vegan range is naturally eggless, and we offer a rotating gluten-free selection baked in a dedicated GF kitchen. Look for the Vegan and Gluten-Free badges on each product card, or filter by category on the Menu page.',
+        'Without artificial preservatives, our cookies stay fresh for 10–14 days in an airtight container. For long-term storage, freeze them for up to 3 months — just pop one in an air fryer or microwave for 10 seconds for a warm, gooey, fresh-baked taste!',
   },
 ]

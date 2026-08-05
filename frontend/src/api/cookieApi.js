@@ -8,6 +8,10 @@ export default {
     return response.data;
   },
 
+  async save(cookie) {
+    return cookie.cookieId ? this.update(cookie) : this.create(cookie);
+  },
+
   async create(cookie) {
     const response = await axios.post(`${API_BASE}/create`, cookie);
     return response.data;
@@ -25,11 +29,8 @@ export default {
     await axios.delete(`${API_BASE}/delete/${cookieId}`);
   },
 
-  async read(cookieId) {
+  async getById(cookieId) {
     const response = await axios.get(`${API_BASE}/read/${cookieId}`);
     return response.data;
-  },
-  async getById(cookieId) {
-    return this.read(cookieId);
   },
 };

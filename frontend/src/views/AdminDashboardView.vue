@@ -4,10 +4,21 @@ import cookieApi from "../api/cookieApi";
 import CookieForm from "../components/admin/CookieForm.vue";
 
 const cookies = ref([]);
-
 const showForm = ref(false);
 const selectedCookie = ref(null);
 
+// Helpers for Modal State
+const openForm = (cookie = null) => {
+  selectedCookie.value = cookie ? { ...cookie } : null;
+  showForm.value = true;
+};
+
+const closeForm = () => {
+  showForm.value = false;
+  selectedCookie.value = null;
+};
+
+// API Actions
 const loadCookies = async () => {
   try {
     cookies.value = await cookieApi.getAll();
@@ -16,29 +27,10 @@ const loadCookies = async () => {
   }
 };
 
-onMounted(loadCookies);
-
-const addCookie = () => {
-  selectedCookie.value = null;
-  showForm.value = true;
-};
-
-const editCookie = (cookie) => {
-  selectedCookie.value = { ...cookie };
-  showForm.value = true;
-};
-
 const saveCookie = async (cookie) => {
   try {
-    if (cookie.cookieId) {
-      await cookieApi.update(cookie);
-    } else {
-      await cookieApi.create(cookie);
-    }
-
-    showForm.value = false;
-    selectedCookie.value = null;
-
+    await cookieApi.save(cookie);
+    closeForm();
     await loadCookies();
   } catch (error) {
     console.error("Failed to save cookie:", error);
@@ -55,6 +47,8 @@ const deleteCookie = async (id) => {
     console.error("Failed to delete cookie:", error);
   }
 };
+
+onMounted(loadCookies);
 </script>
 
 <template>
@@ -63,7 +57,7 @@ const deleteCookie = async (id) => {
 
     <button
       class="bg-primary px-5 py-2 rounded text-white mb-6"
-      @click="addCookie"
+      @click="openForm()"
     >
       Add Cookie
     </button>
@@ -85,7 +79,7 @@ const deleteCookie = async (id) => {
           <td class="p-2">R {{ cookie.price }}</td>
 
           <td class="p-2">
-            <button class="text-blue-600 mr-4" @click="editCookie(cookie)">
+            <button class="text-blue-600 mr-4" @click="openForm(cookie)">
               Edit
             </button>
 
@@ -97,13 +91,11 @@ const deleteCookie = async (id) => {
       </tbody>
     </table>
 
-    <!-- IMPORTANT: This was missing -->
     <CookieForm
-      class="z-50 fixed inset-0 bg-black/50 flex justify-center items-center"
       v-if="showForm"
       :cookie="selectedCookie"
       @save="saveCookie"
-      @close="showForm = false"
+      @close="closeForm"
     />
   </div>
 </template>

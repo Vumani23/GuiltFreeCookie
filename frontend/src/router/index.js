@@ -33,9 +33,8 @@ const routes = [
     meta: { title: "About · CrumbleMagic" },
   },
 
-  // =========================
   // Admin Routes
-  // =========================
+
   {
     path: "/admin",
     name: "AdminDashboard",

@@ -1,7 +1,4 @@
 <script setup>
-/**
- * TheFooter — premium footer with newsletter, link columns, and social icons.
- */
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import {
@@ -85,24 +82,24 @@ const socials = [
             Sweet news, <span class="text-primary">straight to your inbox</span>
           </h2>
           <p class="text-cream/70 text-card mt-3 max-w-md">
-            New cookie drops, secret discount codes, and the occasional crumb of
-            bakery gossip. No spam, just sweet stuff.
+            New cookie drops, secret discount codes, and the occasional guilty of
+            bakery gossip. No spam, just the good stuff.
           </p>
         </div>
         <form
-          class="flex flex-col sm:flex-row gap-3"
-          @submit.prevent="onSubscribe"
+            class="flex flex-col sm:flex-row gap-3"
+            @submit.prevent="onSubscribe"
         >
           <div class="flex-1 relative">
             <EnvelopeIcon
-              class="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-cream/40"
+                class="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-cream/40"
             />
             <input
-              v-model="email"
-              type="email"
-              required
-              placeholder="your@email.com"
-              class="w-full h-14 rounded-full pl-14 pr-5 bg-chocolate-400/60 border border-cream/15 text-cream placeholder:text-cream/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                v-model="email"
+                type="email"
+                required
+                placeholder="your@email.com"
+                class="w-full h-14 rounded-full pl-14 pr-5 bg-chocolate-400/60 border border-cream/15 text-cream placeholder:text-cream/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
             />
           </div>
           <button type="submit" class="btn-secondary h-14 px-7">
@@ -116,14 +113,14 @@ const socials = [
 
     <!-- Main footer grid -->
     <div
-      class="container-magic py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10"
+        class="container-magic py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10"
     >
       <!-- Brand col -->
       <div class="lg:col-span-2">
         <RouterLink to="/" class="flex items-center gap-2 mb-5">
-          <span class="text-2xl">🍪</span>
-          <span class="font-bold text-2xl"
-            >Crumble<span class="text-primary">Magic</span></span
+
+          <span class="font-bold text-2xl luckiest-guy"
+          >GuiltFree<span class="text-primary">Cookie</span></span
           >
         </RouterLink>
         <p class="text-cream/70 text-card max-w-sm mb-6">
@@ -133,27 +130,27 @@ const socials = [
         <ul class="space-y-3 text-cream/70">
           <li class="flex items-center gap-3">
             <span
-              class="flex items-center justify-center h-9 w-9 rounded-full bg-cream/10 text-primary"
+                class="flex items-center justify-center h-9 w-9 rounded-full bg-cream/10 text-primary"
             >
               <PhoneIcon class="h-4 w-4" />
             </span>
-            0114 567 987 · 0112 345 678
+           +27 82 851 3174
           </li>
           <li class="flex items-center gap-3">
             <span
-              class="flex items-center justify-center h-9 w-9 rounded-full bg-cream/10 text-primary"
+                class="flex items-center justify-center h-9 w-9 rounded-full bg-cream/10 text-primary"
             >
               <EnvelopeIcon class="h-4 w-4" />
             </span>
-            crumblemagic@gmail.com
+            hello@guiltfreecookie.co.za
           </li>
           <li class="flex items-center gap-3">
             <span
-              class="flex items-center justify-center h-9 w-9 rounded-full bg-cream/10 text-primary"
+                class="flex items-center justify-center h-9 w-9 rounded-full bg-cream/10 text-primary"
             >
               <MapPinIcon class="h-4 w-4" />
             </span>
-            376/2, Main Road, Colombo 08
+            41 Caravel Road, Strandfontien, Cape Town City , 7798
           </li>
         </ul>
       </div>
@@ -161,18 +158,18 @@ const socials = [
       <!-- Link columns -->
       <div v-for="col in columns" :key="col.title">
         <h4
-          class="font-semibold text-cream mb-4 text-card uppercase tracking-wider text-sm"
+            class="font-semibold text-cream mb-4 text-card uppercase tracking-wider text-sm"
         >
           {{ col.title }}
         </h4>
         <ul class="space-y-2.5">
           <li v-for="link in col.links" :key="link.label">
             <RouterLink
-              :to="link.to"
-              class="text-cream/70 hover:text-primary transition-colors text-card inline-flex items-center group"
+                :to="link.to"
+                class="text-cream/70 hover:text-primary transition-colors text-card inline-flex items-center group"
             >
               <span
-                class="w-0 group-hover:w-3 h-px bg-primary transition-all duration-300 mr-0 group-hover:mr-2"
+                  class="w-0 group-hover:w-3 h-px bg-primary transition-all duration-300 mr-0 group-hover:mr-2"
               />
               {{ link.label }}
             </RouterLink>
@@ -184,25 +181,25 @@ const socials = [
     <!-- Bottom bar -->
     <div class="border-t border-cream/10">
       <div
-        class="container-magic py-6 flex flex-col md:flex-row items-center justify-between gap-4"
+          class="container-magic py-6 flex flex-col md:flex-row items-center justify-between gap-4"
       >
         <p class="text-cream/60 text-sm">
-          © {{ new Date().getFullYear() }} CrumbleMagic. Baked with 🤎 in
-          Colombo.
+          © {{ new Date().getFullYear() }} GuiltFreeCookie. Baked with 🤎 in
+          Cape Town.
         </p>
         <div class="flex items-center gap-3">
           <a
-            v-for="s in socials"
-            :key="s.name"
-            :href="s.href"
-            :aria-label="s.name"
-            class="flex items-center justify-center h-10 w-10 rounded-full bg-cream/10 text-cream/80 hover:bg-primary hover:text-chocolate transition-all hover:-translate-y-0.5"
+              v-for="s in socials"
+              :key="s.name"
+              :href="s.href"
+              :aria-label="s.name"
+              class="flex items-center justify-center h-10 w-10 rounded-full bg-cream/10 text-cream/80 hover:bg-primary hover:text-chocolate transition-all hover:-translate-y-0.5"
           >
             <svg
-              viewBox="0 0 24 24"
-              class="h-5 w-5"
-              fill="currentColor"
-              aria-hidden="true"
+                viewBox="0 0 24 24"
+                class="h-5 w-5"
+                fill="currentColor"
+                aria-hidden="true"
             >
               <path :d="s.path" />
             </svg>
@@ -213,10 +210,10 @@ const socials = [
 
     <!-- Decorative cookie watermark -->
     <div
-      class="pointer-events-none absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-primary/5 blur-3xl"
+        class="pointer-events-none absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-primary/5 blur-3xl"
     />
     <div
-      class="pointer-events-none absolute -top-32 -left-32 w-80 h-80 rounded-full bg-primary/5 blur-3xl"
+        class="pointer-events-none absolute -top-32 -left-32 w-80 h-80 rounded-full bg-primary/5 blur-3xl"
     />
   </footer>
 </template>
