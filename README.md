@@ -6,7 +6,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 
-**CrumbleMagic** is a premium, high-performance e-commerce platform for diet-conscious cookie enthusiasts. Built with a "Glassmorphism" aesthetic, it combines a sleek **Vue 3** frontend with a secure **Spring Boot 3** backend to deliver a seamless shopping experience.
+**GuiltFreeCookie** is a premium, high-performance e-commerce platform for diet-conscious cookie enthusiasts. Built with a "Glassmorphism" aesthetic, it combines a sleek **Vue 3** frontend with a secure **Spring Boot 3** backend to deliver a seamless shopping experience.
 
 ---
 
