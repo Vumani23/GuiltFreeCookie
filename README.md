@@ -35,12 +35,9 @@ The application follows a **Decoupled Architecture** with a stateless REST API.
 
 ### Backend Structure (`za.ac.cput.guiltfreecookie`)
 - **`api/`**: Integration logic.
-- **`config/`**: Security and Bean configurations.
 - **`controller/`**: REST API Endpoints.
 - **`domain/`**: JPA Entities using the **Builder Pattern**.
-- **`dto/`**: Data Transfer Objects for Auth Request/Responses.
 - **`repository/`**: Data Access Layer.
-- **`security/`**: JWT Filters and Token Provider.
 - **`service/`**: Core business logic.
 
 ### Frontend Structure (`src/`)
@@ -50,16 +47,6 @@ The application follows a **Decoupled Architecture** with a stateless REST API.
 - **`stores/`**: Pinia global auth state.
 - **`views/`**: Page components (`AuthView`, `HomeView`).
 
----
-
-## 🔑 Authentication Workflow
-
-1. **User Sign-up:** `AuthView.vue` collects user data and sends it to `/auth/register`. The backend hashes the password with **BCrypt**.
-2. **User Login:** `AuthView.vue` sends credentials to `/auth/login`.
-3. **JWT Generation:** Upon success, the backend generates a signed JWT and returns it.
-4. **Local Storage:** The `authStore` (Pinia) saves the token to `localStorage`.
-5. **Request Interception:** Every outgoing Axios call from `api/index.js` automatically attaches the token to the `Authorization` header.
-6. **Stateless Validation:** The backend `JwtAuthenticationFilter` intercepts every request to validate the token before granting access.
 
 ---
 
