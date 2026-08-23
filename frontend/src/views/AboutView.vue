@@ -1,3 +1,4 @@
+
 <script setup>
 /**
  * AboutView — brand story page.
@@ -135,3 +136,4 @@ const values = [
     <CtaBanner />
   </div>
 </template>
+

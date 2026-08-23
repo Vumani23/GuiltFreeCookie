@@ -7,7 +7,7 @@ defineProps({
     type: Boolean,
     default: false,
   },
-  cookie: {
+  admin: {
     type: Object,
     default: null,
   },
@@ -17,11 +17,11 @@ const emit = defineEmits(["confirm", "close"]);
 </script>
 
 <template>
-  <BaseModal :open="open" title="Delete cookie?" size="sm" @close="emit('close')">
+  <BaseModal :open="open" title="Delete admin?" size="sm" @close="emit('close')">
     <p class="text-chocolate/70 mb-6">
       Are you sure you want to delete
-      <span class="font-semibold text-chocolate">{{ cookie?.description }}</span>? This
-      can't be undone.
+      <span class="font-semibold text-chocolate">{{ admin?.firstName }} {{ admin?.lastName }}</span>?
+      This can't be undone.
     </p>
 
     <div class="flex justify-end gap-3">

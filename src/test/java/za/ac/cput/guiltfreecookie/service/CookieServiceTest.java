@@ -1,26 +1,30 @@
 package za.ac.cput.guiltfreecookie.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import za.ac.cput.guiltfreecookie.domain.Cookie;
 import za.ac.cput.guiltfreecookie.domain.CookieCategory;
 import za.ac.cput.guiltfreecookie.repository.CookieRepository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import java.util.List;
 import java.util.Optional;
 
-@SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 class CookieServiceTest {
 
@@ -30,42 +34,161 @@ class CookieServiceTest {
     @InjectMocks
     private CookieService cookieService;
 
-    private Cookie createTestCookie() {
-        return new Cookie.Builder()
+    private Cookie existingCookie;
+
+    @BeforeEach
+    void setUp() {
+        existingCookie = new Cookie.Builder()
                 .setCookieId("CK001")
                 .setCategory(CookieCategory.HIGH_PROTEIN)
                 .setDescription("Protein Chocolate Cookie")
                 .setIngredients("Whey Protein, Cocoa Powder, Peanut Butter")
                 .setAllergies("Dairy, Peanuts")
                 .setPrice(35.00)
+                .setImage("cookies/original.jpg")
+                .setArchived(false)
                 .build();
     }
 
     @Test
-    @Order(1)
-    void testRead() {
-        Cookie testCookie = createTestCookie();
-        Mockito.when(cookieRepository.findById("CK001")).thenReturn(Optional.of(testCookie));
+    void testCreate() {
+        when(cookieRepository.save(existingCookie)).thenReturn(existingCookie);
 
-        Cookie result = cookieService.read("CK001");
+        Cookie result = cookieService.create(existingCookie);
 
-        assertNotNull(result);
-        assertEquals("Protein Chocolate Cookie", result.getDescription());
-        Mockito.verify(cookieRepository).findById("CK001");
-        System.out.println(result);
+        assertEquals("CK001", result.getCookieId());
+        verify(cookieRepository).save(existingCookie);
     }
 
     @Test
-    @Order(2)
-    void testCreate() {
-        Cookie testCookie = createTestCookie();
-        Mockito.when(cookieRepository.save(testCookie)).thenReturn(testCookie);
+    void testReadFound() {
+        when(cookieRepository.findById("CK001")).thenReturn(Optional.of(existingCookie));
 
-        Cookie result = cookieService.create(testCookie);
+        Cookie result = cookieService.read("CK001");
 
-        assertNotNull(result);
+        assertEquals("Protein Chocolate Cookie", result.getDescription());
+    }
+
+    @Test
+    void testReadNotFound() {
+        when(cookieRepository.findById("missing")).thenReturn(Optional.empty());
+
+        Cookie result = cookieService.read("missing");
+
+        assertNull(result);
+    }
+
+    @Test
+    void testUpdateWhenFoundMergesEditableFieldsAndKeepsArchivedFlag() {
+        Cookie archivedExisting = new Cookie.Builder().copy(existingCookie).setArchived(true).build();
+        Cookie incoming = new Cookie.Builder()
+                .setCookieId("CK001")
+                .setCategory(CookieCategory.VEGAN)
+                .setDescription("Updated Description")
+                .setIngredients("Updated Ingredients")
+                .setAllergies("Updated Allergies")
+                .setPrice(40.00)
+                .setImage("cookies/new.jpg")
+                .build();
+
+        when(cookieRepository.findById("CK001")).thenReturn(Optional.of(archivedExisting));
+        when(cookieRepository.save(any(Cookie.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Cookie result = cookieService.update(incoming);
+
         assertEquals("CK001", result.getCookieId());
-        Mockito.verify(cookieRepository).save(testCookie);
-        System.out.println(result);
+        assertEquals(CookieCategory.VEGAN, result.getCategory());
+        assertEquals("Updated Description", result.getDescription());
+        assertEquals("Updated Ingredients", result.getIngredients());
+        assertEquals("Updated Allergies", result.getAllergies());
+        assertEquals(40.00, result.getPrice());
+        assertEquals("cookies/new.jpg", result.getImage());
+        assertTrue(result.isArchived(), "update() must not silently un-archive a cookie");
+    }
+
+    @Test
+    void testUpdateWhenNotFoundReturnsNull() {
+        when(cookieRepository.findById("missing")).thenReturn(Optional.empty());
+
+        Cookie incoming = new Cookie.Builder().setCookieId("missing").build();
+        Cookie result = cookieService.update(incoming);
+
+        assertNull(result);
+        verify(cookieRepository, never()).save(any(Cookie.class));
+    }
+
+    @Test
+    void testDeleteWhenExists() {
+        when(cookieRepository.existsById("CK001")).thenReturn(true);
+
+        boolean result = cookieService.delete("CK001");
+
+        assertTrue(result);
+        verify(cookieRepository).deleteById("CK001");
+    }
+
+    @Test
+    void testDeleteWhenNotExists() {
+        when(cookieRepository.existsById("missing")).thenReturn(false);
+
+        boolean result = cookieService.delete("missing");
+
+        assertFalse(result);
+        verify(cookieRepository, never()).deleteById(anyString());
+    }
+
+    @Test
+    void testGetAllReturnsEveryCookieIncludingArchived() {
+        Cookie archived = new Cookie.Builder().copy(existingCookie).setCookieId("CK002").setArchived(true).build();
+        when(cookieRepository.findAll()).thenReturn(List.of(existingCookie, archived));
+
+        List<Cookie> result = cookieService.getAll();
+
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    void testGetAllActiveDelegatesToArchivedFalseQuery() {
+        when(cookieRepository.findByArchivedFalse()).thenReturn(List.of(existingCookie));
+
+        List<Cookie> result = cookieService.getAllActive();
+
+        assertEquals(1, result.size());
+        assertFalse(result.get(0).isArchived());
+        verify(cookieRepository, times(1)).findByArchivedFalse();
+    }
+
+    @Test
+    void testSetArchivedTrue() {
+        when(cookieRepository.findById("CK001")).thenReturn(Optional.of(existingCookie));
+        ArgumentCaptor<Cookie> captor = ArgumentCaptor.forClass(Cookie.class);
+        when(cookieRepository.save(captor.capture())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Cookie result = cookieService.setArchived("CK001", true);
+
+        assertTrue(result.isArchived());
+        assertEquals("CK001", captor.getValue().getCookieId());
+        assertTrue(captor.getValue().isArchived());
+    }
+
+    @Test
+    void testSetArchivedFalse() {
+        Cookie archived = new Cookie.Builder().copy(existingCookie).setArchived(true).build();
+        when(cookieRepository.findById("CK001")).thenReturn(Optional.of(archived));
+        when(cookieRepository.save(any(Cookie.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Cookie result = cookieService.setArchived("CK001", false);
+
+        assertFalse(result.isArchived());
+    }
+
+    @Test
+    void testSetArchivedWhenNotFoundReturnsNull() {
+        when(cookieRepository.findById("missing")).thenReturn(Optional.empty());
+
+        Cookie result = cookieService.setArchived("missing", true);
+
+        assertNull(result);
+        verify(cookieRepository, never()).save(any(Cookie.class));
     }
 }

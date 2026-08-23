@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import za.ac.cput.guiltfreecookie.domain.Admin;
 
 import za.ac.cput.guiltfreecookie.service.AdminService;
+import za.ac.cput.guiltfreecookie.util.Helper;
 
 import java.util.List;
 
@@ -25,6 +26,13 @@ public class AdminController {
 
     @PostMapping("/create")
     public ResponseEntity<Admin> create(@RequestBody Admin admin) {
+        if (Helper.isNullOrEmpty(admin.getFirstName())
+                || Helper.isNullOrEmpty(admin.getLastName())
+                || Helper.isNullOrEmpty(admin.getPassword())
+                || !Helper.isValidEmail(admin.getEmail())) {
+            return ResponseEntity.badRequest().build();
+        }
+
         return new ResponseEntity<>(adminService.create(admin), HttpStatus.CREATED);
     }
 
@@ -45,7 +53,18 @@ public class AdminController {
 
     @PutMapping("/update")
     public ResponseEntity<Admin> update(@RequestBody Admin admin) {
-        return ResponseEntity.ok(adminService.update(admin));
+        if (Helper.isNullOrEmpty(admin.getFirstName())
+                || Helper.isNullOrEmpty(admin.getLastName())
+                || !Helper.isValidEmail(admin.getEmail())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Admin updated = adminService.update(admin);
+        if (updated == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -65,5 +84,50 @@ public class AdminController {
         }
 
         return ResponseEntity.ok(foundAdmin);
+    }
+
+    @PutMapping("/active/{id}")
+    public ResponseEntity<Admin> setActive(@PathVariable String id, @RequestParam boolean active) {
+        Admin updated = adminService.setActive(id, active);
+
+        if (updated == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(updated);
+    }
+
+    @PostMapping("/resetPassword/{id}")
+    public ResponseEntity<Admin> resetPassword(@PathVariable String id) {
+        Admin updated = adminService.resetPassword(id);
+
+        if (updated == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(updated);
+    }
+
+    @PutMapping("/changePassword/{id}")
+    public ResponseEntity<?> changePassword(
+            @PathVariable String id,
+            @RequestBody ChangePasswordRequest request) {
+
+        Admin admin = adminService.read(id);
+        if (admin == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (!admin.getPassword().equals(request.getCurrentPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Current password is incorrect");
+        }
+
+        if (Helper.isNullOrEmpty(request.getNewPassword())) {
+            return ResponseEntity.badRequest().body("New password cannot be empty");
+        }
+
+        Admin updated = adminService.changePassword(id, request.getNewPassword());
+        return ResponseEntity.ok(updated);
     }
 }

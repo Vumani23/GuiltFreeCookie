@@ -56,9 +56,12 @@ onUnmounted(() => {
         <Transition name="modal" appear>
           <div
             v-if="open"
-            :class="['w-full bg-background rounded-4xl shadow-soft-xl p-8', sizeClass]"
+            :class="['w-full max-h-[90vh] flex flex-col bg-background rounded-4xl shadow-soft-xl', sizeClass]"
           >
-            <div v-if="title || $slots.header" class="flex items-start justify-between mb-6">
+            <div
+              v-if="title || $slots.header"
+              class="flex items-start justify-between p-8 pb-6 shrink-0"
+            >
               <h3 v-if="title" class="text-2xl font-medium text-chocolate">{{ title }}</h3>
               <slot name="header" />
               <button
@@ -69,7 +72,9 @@ onUnmounted(() => {
                 <XMarkIcon class="h-6 w-6" />
               </button>
             </div>
-            <slot />
+            <div class="overflow-y-auto px-8 pb-8" :class="{ 'pt-8': !title && !$slots.header }">
+              <slot />
+            </div>
           </div>
         </Transition>
       </div>

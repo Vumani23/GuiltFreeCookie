@@ -44,6 +44,7 @@ public class CookieService implements IService<Cookie, String> {
                 .setIngredients(cookie.getIngredients())
                 .setAllergies(cookie.getAllergies())
                 .setPrice(cookie.getPrice())
+                .setImage(cookie.getImage())
                 .build();
 
         return cookieRepository.save(updated);
@@ -61,6 +62,25 @@ public class CookieService implements IService<Cookie, String> {
     @Override
     public List<Cookie> getAll() {
         return this.cookieRepository.findAll();
+    }
+
+    public List<Cookie> getAllActive() {
+        return this.cookieRepository.findByArchivedFalse();
+    }
+
+    public Cookie setArchived(String id, boolean archived) {
+        Cookie existing = cookieRepository.findById(id).orElse(null);
+
+        if (existing == null) {
+            return null;
+        }
+
+        Cookie updated = new Cookie.Builder()
+                .copy(existing)
+                .setArchived(archived)
+                .build();
+
+        return cookieRepository.save(updated);
     }
 
 }

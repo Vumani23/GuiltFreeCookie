@@ -162,10 +162,7 @@ const quantity = ref(1);
 const relatedCookies = ref([]);
 
 const displayImage = computed(
-  () =>
-    cookie.value?.image ||
-    cookie.value?.imageUrl ||
-    "/images/cookie-placeholder.png",
+  () => cookieApi.getImageUrl(cookie.value?.image) || "/cookie.png",
 );
 
 const displayRating = computed(() => cookie.value?.rating ?? 5);

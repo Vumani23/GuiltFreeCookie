@@ -18,6 +18,8 @@ public class Cookie {
     private String ingredients;
     private String allergies;
     private Double price;
+    private String image;
+    private boolean archived;
 
     protected Cookie() {
     }
@@ -29,6 +31,8 @@ public class Cookie {
         this.ingredients = builder.ingredients;
         this.allergies = builder.allergies;
         this.price = builder.price;
+        this.image = builder.image;
+        this.archived = builder.archived;
     }
 
     public String getCookieId() {
@@ -55,6 +59,14 @@ public class Cookie {
         return price;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
     @Override
     public String toString() {
         return "Cookie{" +
@@ -64,6 +76,8 @@ public class Cookie {
                 ", ingredients='" + ingredients + '\'' +
                 ", allergies='" + allergies + '\'' +
                 ", price=" + price +
+                ", image='" + image + '\'' +
+                ", archived=" + archived +
                 '}';
     }
 
@@ -74,6 +88,8 @@ public class Cookie {
         private String ingredients;
         private String allergies;
         private Double price;
+        private String image;
+        private boolean archived;
 
         public Builder setCookieId(String cookieId) {
             this.cookieId = cookieId;
@@ -105,6 +121,16 @@ public class Cookie {
             return this;
         }
 
+        public Builder setImage(String image) {
+            this.image = image;
+            return this;
+        }
+
+        public Builder setArchived(boolean archived) {
+            this.archived = archived;
+            return this;
+        }
+
         public Builder copy(Cookie cookie) {
             this.cookieId = cookie.cookieId;
             this.category = cookie.category;
@@ -112,6 +138,8 @@ public class Cookie {
             this.ingredients = cookie.ingredients;
             this.allergies = cookie.allergies;
             this.price = cookie.price;
+            this.image = cookie.image;
+            this.archived = cookie.archived;
             return this;
         }
 

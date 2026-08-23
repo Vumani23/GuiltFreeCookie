@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "admins")
 public class Admin {
@@ -17,6 +19,8 @@ public class Admin {
     private String lastName;
     private String email;
     private String password;
+    private boolean active;
+    private LocalDateTime passwordExpiresAt;
 
     protected Admin() {
     }
@@ -27,6 +31,8 @@ public class Admin {
         this.lastName = builder.lastName;
         this.email = builder.email;
         this.password = builder.password;
+        this.active = builder.active;
+        this.passwordExpiresAt = builder.passwordExpiresAt;
     }
 
     public String getAdminId() {
@@ -49,6 +55,14 @@ public class Admin {
         return password;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public LocalDateTime getPasswordExpiresAt() {
+        return passwordExpiresAt;
+    }
+
     @Override
     public String toString() {
         return "Admin{" +
@@ -56,6 +70,7 @@ public class Admin {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", active=" + active +
                 '}';
     }
 
@@ -66,6 +81,8 @@ public class Admin {
         private String lastName;
         private String email;
         private String password;
+        private boolean active = true;
+        private LocalDateTime passwordExpiresAt;
 
         public Builder setAdminId(String adminId) {
             this.adminId = adminId;
@@ -92,12 +109,24 @@ public class Admin {
             return this;
         }
 
+        public Builder setActive(boolean active) {
+            this.active = active;
+            return this;
+        }
+
+        public Builder setPasswordExpiresAt(LocalDateTime passwordExpiresAt) {
+            this.passwordExpiresAt = passwordExpiresAt;
+            return this;
+        }
+
         public Builder copy(Admin admin) {
             this.adminId = admin.adminId;
             this.firstName = admin.firstName;
             this.lastName = admin.lastName;
             this.email = admin.email;
             this.password = admin.password;
+            this.active = admin.active;
+            this.passwordExpiresAt = admin.passwordExpiresAt;
             return this;
         }
 

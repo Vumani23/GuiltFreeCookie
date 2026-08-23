@@ -12,4 +12,6 @@ import java.util.List;
 @Repository
 public interface CookieRepository extends JpaRepository<Cookie, String> {
 
+    List<Cookie> findByArchivedFalse();
+
 }

@@ -4,11 +4,7 @@
   >
     <div class="w-40 h-40 shrink-0">
       <img
-          :src="
-          related.image ||
-          related.imageUrl ||
-          '/images/cookie-placeholder.png'
-        "
+          :src="displayImage"
           :alt="related.description"
           class="w-full h-full object-cover rounded-full p-4"
       />
@@ -50,9 +46,11 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { ShoppingCartIcon } from "@heroicons/vue/24/outline";
+import cookieApi from "../../api/cookieApi";
 
-defineProps({
+const props = defineProps({
   related: {
     type: Object,
     required: true,
@@ -60,4 +58,8 @@ defineProps({
 });
 
 defineEmits(["add-to-cart"]);
+
+const displayImage = computed(
+    () => cookieApi.getImageUrl(props.related.image) || "/cookie.png"
+);
 </script>

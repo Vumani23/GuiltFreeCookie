@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import { ShoppingBagIcon, EyeIcon } from "@heroicons/vue/24/outline";
 import BaseBadge from "../../components/ui/BaseBadge.vue";
 import { useFormat } from "../../composables/useFormat";
+import cookieApi from "../../api/cookieApi";
 
 const props = defineProps({
   cookie: {
@@ -17,6 +18,10 @@ const { truncate } = useFormat();
 
 const displayBadge = computed(() =>
     props.cookie.category.replace(/_/g, " ")
+);
+
+const displayImage = computed(
+    () => cookieApi.getImageUrl(props.cookie.image) || "/cookie.png"
 );
 
 const goToDetails = () => {
@@ -63,7 +68,7 @@ const goToDetails = () => {
           class="relative w-44 h-44 rounded-full overflow-hidden transition-transform duration-700 ease-cookie group-hover:scale-110 group-hover:rotate-6 shadow-cookie ring-4 ring-cream-100"
       >
         <img
-            :src="props.cookie.image"
+            :src="displayImage"
             :alt="props.cookie.description"
             loading="lazy"
             class="w-full h-full object-cover"
