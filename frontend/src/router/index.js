@@ -7,6 +7,7 @@ import AdminDashboardView from "../views/AdminDashboardView.vue";
 import AdminUsersView from "../views/AdminUsersView.vue";
 import AdminOrdersView from "../views/AdminOrdersView.vue";
 import AdminProfileView from "../views/AdminProfileView.vue";
+import CartView from "../views/CartView.vue";
 import { isAdminLoggedIn } from "../composables/useAdminAuth";
 
 const routes = [
@@ -24,6 +25,11 @@ const routes = [
     path: "/product/:id",
     name: "ProductDetail",
     component: ProductDetailView,
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component: CartView,
   },
   {
     path: "/contact",

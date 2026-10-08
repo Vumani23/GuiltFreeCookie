@@ -24,8 +24,10 @@ import {
   BuildingStorefrontIcon,
 } from "@heroicons/vue/24/outline";
 import { useAdminAuth } from "../composables/useAdminAuth";
+import { useCart } from "../composables/useCart";
 
 const { logout } = useAdminAuth();
+const { itemCount } = useCart();
 
 const sidebarOpen = ref(false);
 
@@ -191,8 +193,12 @@ const onCartClick = () => {
             type="button"
             class="relative h-11 w-11 flex items-center justify-center rounded-full bg-chocolate text-cream hover:bg-chocolate-600 hover:shadow-soft transition-all hover:-translate-y-0.5"
             aria-label="Open cart"
+            @click="onCartClick"
           >
             <ShoppingBagIcon class="h-5 w-5" />
+            <span v-if="itemCount" class="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-primary text-[11px] font-bold text-chocolate flex items-center justify-center">
+              {{ itemCount }}
+            </span>
           </button>
         </template>
 
@@ -341,12 +347,12 @@ const onCartClick = () => {
             </button>
 
             <RouterLink
-              :to="{ name: 'Products' }"
+              :to="{ name: 'Cart' }"
               class="btn-primary btn-block flex items-center justify-center gap-2"
               @click="closeSidebar"
             >
               <ShoppingBagIcon class="h-5 w-5" />
-              Order Now
+              View Cart <span v-if="itemCount">({{ itemCount }})</span>
             </RouterLink>
           </div>
         </aside>

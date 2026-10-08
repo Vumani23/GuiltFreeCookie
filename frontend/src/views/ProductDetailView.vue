@@ -128,6 +128,7 @@
               v-for="related in relatedCookies"
               :key="related.id"
               :related="related"
+              @add-to-cart="addRelatedToCart"
             />
           </div>
         </div>
@@ -140,7 +141,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ArrowLeftIcon, ShoppingBagIcon } from "@heroicons/vue/24/outline";
 import { StarIcon } from "@heroicons/vue/24/solid";
 
@@ -152,9 +153,14 @@ import QuantitySelector from "../components/cookieDetails/QuantitySelector.vue";
 import RelatedCookieCard from "../components/cookieDetails/RelatedCookieCard.vue";
 import NewsletterSection from "../components/sections/NewsletterSection.vue";
 import { useScrollReveal } from "../composables/useScrollReveal";
+import { useCart } from "../composables/useCart";
+import { useToast } from "../composables/useToast";
 
 const { vReveal } = useScrollReveal();
 const route = useRoute();
+const router = useRouter();
+const { addItem } = useCart();
+const { showToast } = useToast();
 
 const cookie = ref(null);
 const loading = ref(false);
@@ -167,10 +173,26 @@ const displayImage = computed(
 
 const displayRating = computed(() => cookie.value?.rating ?? 5);
 
-const addToCart = () => {};
+const addToCart = async () => {
+  if (!cookie.value) return;
+  const synced = await addItem(cookie.value, quantity.value);
+  showToast(
+    synced ? "Added to your cart." : "Added on this device; cart sync is unavailable.",
+    synced ? "success" : "error",
+  );
+};
 
-const buyNow = () => {
-  addToCart();
+const addRelatedToCart = async (relatedCookie) => {
+  const synced = await addItem(relatedCookie);
+  showToast(
+    synced ? "Added to your cart." : "Added on this device; cart sync is unavailable.",
+    synced ? "success" : "error",
+  );
+};
+
+const buyNow = async () => {
+  await addToCart();
+  router.push({ name: "Cart" });
 };
 
 const fetchCookie = async () => {

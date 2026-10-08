@@ -4,6 +4,8 @@ import { useRouter } from "vue-router";
 import { ShoppingBagIcon, EyeIcon } from "@heroicons/vue/24/outline";
 import BaseBadge from "../../components/ui/BaseBadge.vue";
 import { useFormat } from "../../composables/useFormat";
+import { useCart } from "../../composables/useCart";
+import { useToast } from "../../composables/useToast";
 import cookieApi from "../../api/cookieApi";
 
 const props = defineProps({
@@ -15,6 +17,8 @@ const props = defineProps({
 
 const router = useRouter();
 const { truncate } = useFormat();
+const { addItem } = useCart();
+const { showToast } = useToast();
 
 const displayBadge = computed(() =>
     props.cookie.category.replace(/_/g, " ")
@@ -31,6 +35,14 @@ const goToDetails = () => {
       id: props.cookie.cookieId,
     },
   });
+};
+
+const quickAdd = async () => {
+  const synced = await addItem(props.cookie);
+  showToast(
+    synced ? "Added to your cart." : "Added on this device; cart sync is unavailable.",
+    synced ? "success" : "error",
+  );
 };
 </script>
 
@@ -54,7 +66,7 @@ const goToDetails = () => {
         type="button"
         class="absolute top-5 right-5 z-10 flex items-center justify-center h-10 w-10 rounded-full transition-all duration-300 bg-cream-100 text-chocolate/60 hover:bg-primary hover:text-chocolate"
         aria-label="Quick add to cart"
-        @click.stop
+        @click.stop="quickAdd"
     >
       <ShoppingBagIcon class="h-5 w-5" />
     </button>
