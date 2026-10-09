@@ -2,14 +2,28 @@ package za.ac.cput.guiltfreecookie.domain;
 
 
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.Table;
 import java.util.Objects;
 
+@Entity
+@Table(name = "cookie_cart")
+@IdClass(CookieCartId.class)
 public class CookieCart {
 
+    @Id
+    @Column(name = "cookie_id")
     private String cookieId;
+
+    @Id
+    @Column(name = "cart_id")
     private String cartId;
 
-    // Private constructor
+    protected CookieCart() {}
+
     private CookieCart(Builder builder) {
         this.cookieId = builder.cookieId;
         this.cartId = builder.cartId;
